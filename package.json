@@ -1,0 +1,25 @@
+{
+  "name": "botbaileys-forwarder",
+  "version": "1.0.0",
+  "description": "Un bot de Baileys diseñado para reenviar media.",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "baileys"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.7.18",
+    "axios": "^1.10.0",
+    "chokidar": "^4.0.3",
+    "dotenv": "^16.5.0",
+    "pino": "^9.7.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
