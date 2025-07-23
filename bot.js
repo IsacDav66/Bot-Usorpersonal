@@ -334,7 +334,14 @@ async function startBot() {
 
         sock = makeWASocket({
             version,
-            //logger: pino({ level: 'debug' }),
+            
+            // 1. MANTENEMOS ESTA LÍNEA: No anunciar "en línea" al conectar.
+            markOnlineOnConnect: false,
+
+            // 2. AÑADIMOS ESTA LÍNEA: Desactiva el procesamiento de tareas de lectura/no lectura.
+            //    Esta es la causa más común de que el estado "en línea" aparezca después de conectar.
+            readUndreadTask: false,
+
             auth: state,
             browser: Browsers.macOS('Desktop'),
         });
@@ -423,6 +430,10 @@ async function startBot() {
                 isConnecting = false;
                 console.log(color.brightGreen + '\n**************** BOT LISTO (Conectado a WhatsApp) ****************\n' + color.reset);
                 console.log(color.cyan + `Conectado como: ${sock?.user?.name || sock?.user?.id}` + color.reset);
+
+                // 3. AÑADIMOS ESTA LÍNEA: Forzar el estado a "no disponible" (offline)
+                //    Esto actúa como un seguro para anular cualquier estado "en línea" residual.
+                await sock.sendPresenceUpdate('unavailable');
                 
                 // ----- ¡LLAMAR A LA INICIALIZACIÓN DE LA BD AQUÍ! -----
                 try {
@@ -433,7 +444,6 @@ async function startBot() {
                     console.error("\x1b[31m[DB Init Error]\x1b[0m Falló la inicialización de la base de datos después de conectar a WhatsApp:", dbError);
                 }
                 // ---------------------------------------------------
-    
             }
 
             if (connection) {
